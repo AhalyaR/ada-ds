@@ -1,0 +1,183 @@
+/*program to implement inserion and deletion in binary tree*/
+#include <iostream>
+#include<queue>
+#include<stdlib.h>
+
+using namespace std;
+
+//tree node has a key value and pointer to left and right child
+struct node{
+ int key;
+ struct node *left,*right;
+ };
+ 
+ //function to create a new node of tree and return a pointer to that node
+ struct node* newnode(int ele)
+ {
+
+     struct node* current=new node;
+     current->key=ele;
+     current->left=current->right=NULL;
+     return current;
+ };
+ 
+//perform inorder traversal of a binary tree
+ void inorder(struct node *temp)
+ {
+
+     if(!temp)
+        return;
+     inorder(temp->left);
+     cout<<temp->key<<" ";
+     inorder(temp->right);
+
+ }
+ 
+ //function to insert a new node 
+ void insert(struct node *temp,int ele)
+ {
+
+     queue<struct node*> q;
+     q.push(temp);
+
+   //perform level order traversal until you find an empty place
+     while(!q.empty())
+     {
+
+         struct node *temp=q.front();
+         q.pop();
+         if(temp->left==NULL){
+            temp->left=newnode(ele);
+            break;
+         }
+         else
+            q.push(temp->left);
+         if(temp->right==NULL)
+         {
+
+             temp->right=newnode(ele);
+             break;
+
+         }
+         else
+            q.push(temp->right);
+
+
+     }
+ }
+ 
+ //function to delete the last(deepest) node in a binary tree 
+ void deletelast(struct node *root,struct node *delnode)
+ {
+
+     queue<struct node*> q;
+     q.push(root);
+     struct node *temp;
+     
+     //perform level order traversal until last node
+     while(!q.empty())
+     {
+
+         temp=q.front();
+         q.pop();
+         if(temp->right)
+         {
+
+             if(temp->right==delnode)
+             {
+
+                 temp->right=NULL;
+                 delete(delnode);
+                 return;
+             }
+             else
+                q.push(temp->right);
+
+         }
+         if(temp->left)
+         {
+
+             if(temp->left==delnode)
+             {
+
+                 temp->left=NULL;
+                 delete(delnode);
+                 return;
+             }
+             else
+                q.push(temp->left);
+         }
+
+     }
+
+ }
+ 
+ //function to delete the given element in a binary tree
+ void deletion(struct node *root,int ele)
+ {
+
+     queue<struct node*> q;
+     q.push(root);
+     struct node *temp;
+     struct node *delnode=NULL;
+     
+     //perform level order traversal to find the last node and node to be deleted
+     while(!q.empty())
+     {
+
+         temp=q.front();
+         q.pop();
+         if(temp->key==ele)
+            delnode=temp;
+         if(temp->left)
+            q.push(temp->left);
+         if(temp->right)
+            q.push(temp->right);
+     }
+     int x=temp->key;
+     deletelast(root,temp);
+     delnode->key=x;
+ }
+
+//main function
+ int main()
+ {
+
+     struct node *root=newnode(23);
+     root->left=newnode(15);
+     root->left->left=newnode(6);
+     root->right=newnode(10);
+     root->right->left=newnode(17);
+     root->right->right=newnode(4);
+     cout<<"Before inserting given tree traversal inorder is\n";
+     inorder(root);
+     int p;
+     while(1)
+     {
+
+         cout<<"Enter  key to insert(enter negative to exit) ";
+         cin>>p;
+         if(p<0)
+            break;
+         insert(root,p);
+     }
+     cout<<endl<<"Inorder travesal after insertion\n";
+     inorder(root);
+     cout<<"\n";
+     while(1)
+     {
+
+         cout<<"Enter a node to delete(enter negative to break)\n";
+         int z;
+         cin>>z;
+         if(z<0)
+            break;
+         deletion(root,z);
+
+     }
+     cout<<"Inorder order traversal after deletion \n";
+         inorder(root);
+     return 0;
+ }
+
+
