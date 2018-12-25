@@ -112,7 +112,7 @@ struct node{
 
  }
  
- //function to delete the given element in a binary tree
+ //function to delete the given element in tree
  void deletion(struct node *root,int ele)
  {
 
