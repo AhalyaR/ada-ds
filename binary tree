@@ -139,7 +139,7 @@ struct node{
      delnode->key=x;
  }
 
-//main function
+//main function..
  int main()
  {
 
